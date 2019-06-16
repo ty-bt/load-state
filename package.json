@@ -14,7 +14,7 @@
     "loading"
   ],
   "author": "ty_bt",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "is-type-of": "^1.2.1"
   },
