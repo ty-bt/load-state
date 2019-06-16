@@ -1,0 +1,31 @@
+{
+  "name": "load-state",
+  "version": "0.0.1",
+  "description": "加载中状态管理. Loading state management.",
+  "main": "lib/index.js",
+  "scripts": {
+    "test": "npm run build && mocha -t 5000",
+    "build": "babel src -d lib",
+    "build:watch": "npm run build -- --watch",
+    "cover": "istanbul cover node_modules/mocha/bin/_mocha",
+    "coveralls": "npm run cover -- --report lcovonly && cat ./coverage/lcov.info | coveralls"
+  },
+  "keywords": [
+    "loading"
+  ],
+  "author": "ty_bt",
+  "license": "ISC",
+  "dependencies": {
+    "is-type-of": "^1.2.1"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.0.0",
+    "@babel/core": "^7.4.5",
+    "@babel/preset-env": "^7.4.5",
+    "babel-polyfill": "^6.26.0",
+    "chai": "^4.2.0",
+    "coveralls": "^3.0.4",
+    "istanbul": "^0.4.5",
+    "mocha": "^6.1.4"
+  }
+}
