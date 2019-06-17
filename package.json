@@ -3,6 +3,11 @@
   "version": "0.0.1",
   "description": "加载中状态管理. Loading state management.",
   "main": "lib/loadState.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ty-bt/load-state.git"
+  },
+  "homepage": "https://github.com/ty-bt/load-state",
   "scripts": {
     "test": "npm run build && mocha -t 5000",
     "build": "babel src -d lib",
