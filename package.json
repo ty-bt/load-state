@@ -2,7 +2,7 @@
   "name": "load-state",
   "version": "0.0.1",
   "description": "加载中状态管理. Loading state management.",
-  "main": "lib/index.js",
+  "main": "lib/loadState.js",
   "scripts": {
     "test": "npm run build && mocha -t 5000",
     "build": "babel src -d lib",
