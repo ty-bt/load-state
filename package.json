@@ -2,7 +2,7 @@
   "name": "load-state",
   "version": "0.0.2",
   "description": "加载中状态管理. Loading state management.",
-  "main": "lib/index.js",
+  "main": "lib/loadState.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/ty-bt/load-state.git"

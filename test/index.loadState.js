@@ -1,6 +1,6 @@
 require("babel-polyfill");
 const chai = require('chai');
-const loadState = require('../lib').default;
+const loadState = require('../lib/loadState').default;
 
 // 断言工具
 const expect = chai.expect;
