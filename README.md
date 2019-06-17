@@ -1,6 +1,5 @@
 # load-state
 [![npm](https://img.shields.io/npm/v/load-state.svg)](https://www.npmjs.com/package/load-state)
-
 [![Coverage Status](https://coveralls.io/repos/github/ty-bt/load-state/badge.svg?branch=master)](https://coveralls.io/github/ty-bt/load-state?branch=master)
 [![Build Status](https://travis-ci.org/ty-bt/load-state.svg?branch=master)](https://travis-ci.org/ty-bt/load-state)
 
