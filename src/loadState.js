@@ -1,6 +1,22 @@
 import is from "is-type-of";
 
 const loadState = {
+
+    /**
+     * 获取下一个状态值
+     * 如果不存在 或 类型是布尔型 则认为是初始值 0 用于刚开始就显示加载状态true的情况
+     * @param cur 当前状态值
+     * @param change 修改值
+     * @returns {*}
+     */
+    getNextState(cur, change){
+        // 如果不存在 或 类型是布尔型 则认为是初始值 0 用于刚开始就显示加载状态true的情况
+        if(!cur || is.boolean(cur)){
+            cur = 0;
+        }
+        return cur + change;
+    },
+
     /**
      * 创建一个loading方法
      * @param changeLoadFn function(change) 进入loading则change为1, 取消loading则change为-1
@@ -45,11 +61,7 @@ const loadState = {
             // 修改组件state中指定属性
             this.setState(prevState => {
                 let loading = prevState[field];
-                // 如果不存在 或 类型是布尔型 则认为是初始值 0 用于刚开始就显示加载状态true的情况
-                if(!loading || is.boolean(loading)){
-                    loading = 0;
-                }
-                loading += change;
+                loading = loadState.getNextState(loading, change);
                 let nextState = Object.assign({}, prevState);
                 nextState[field] = loading;
                 return nextState;
@@ -66,11 +78,7 @@ const loadState = {
         return this.createFn(function(change){
             // 修改组件props中指定属性
             let loading = this[field];
-            // 如果不存在 或 类型是布尔型 则认为是初始值 0 用于刚开始就显示加载状态true的情况
-            if(!loading || is.boolean(loading)){
-                loading = 0;
-            }
-            loading += change;
+            loading = loadState.getNextState(loading, change);
             this[field] = loading;
         });
     }
