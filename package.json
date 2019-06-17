@@ -1,6 +1,6 @@
 {
   "name": "load-state",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "加载中状态管理. Loading state management.",
   "main": "lib/loadState.js",
   "repository": {
