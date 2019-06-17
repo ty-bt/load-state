@@ -5,6 +5,48 @@
 [![Build Status](https://travis-ci.org/ty-bt/load-state.svg?branch=master)](https://travis-ci.org/ty-bt/load-state)
 
 加载中状态管理. Loading state management.
+使用数值类型来管理加载状态，每次调用加载方法状态+1，加载方法参数中的promise执行完成或异常后状态-1
+当管理的状态值为0时为非加载状态，>0则为加载状态
+可以使用 `!!` 将其转为 boolean
 
-## react 示例
-[![Edit falling-leftpad-5l61g](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/falling-leftpad-5l61g?fontsize=14)
+## loadState.createFn(changeLoadFn)
+创建一个加载方法
+### 参数
+`changeLoadFn` `function(change)` 状态变更方法，change为1或-1, 可通过`loadState.getNextState`方法获取下一个状态值
+### 返回值
+返回一个加载方法`function(promise)`, promise可以是一个`Promise对象`或`返回Promise对象的方法`
+执行此方法，方法会将管理的状态值+1，promise对象成功或出现异常时会将状态值-1
+
+
+## loadState.getNextState(cur, change)
+获取下一个状态值
+
+### 参数
+* cur: 当前状态值
+* change: 修改值 1 或 -1 `loadState.createFn` 参数方法中接受到的参数
+### 返回值
+如果`cur`为boolean类型或为空则认为0，再继续加上change
+
+## loadState.createRFn(field) React组件内使用封装
+### 参数
+`field` state中的状态名称
+### 返回值
+返回一个加载方法
+
+示例：[![Edit wonderful-breeze-vvxnh](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/wonderful-breeze-vvxnh?fontsize=14)
+
+
+## loadState.createVFn(field) Vue组件内使用封装
+
+### 参数
+`field` data中的状态名称
+### 返回值
+返回一个加载方法
+
+示例：[![Edit Vue Template](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/vue-template-kdl6u?fontsize=14)
+
+
+## 加载方法的使用
+`function(promise)`, promise可以是一个`Promise对象`或`返回Promise对象的方法`
+
+
