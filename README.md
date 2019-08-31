@@ -16,7 +16,7 @@
 ### 返回值
 返回一个加载方法`function(promise)`, 
 * promise可以是一个`Promise对象`或`返回Promise对象的方法`
-* `0.6版本以上` promise可以是boolean值，true loading 计数+1 , false -1`（这样使用需要自己管理好状态，不然可能会导致一些异常）`
+* `0.1版本以上` promise可以是boolean值，true loading 计数+1 , false -1`（这样使用需要自己管理好状态，不然可能会导致一些异常）`
 * 执行此方法，方法会将管理的状态值+1，promise对象成功或出现异常时会将状态值-1
 
 
