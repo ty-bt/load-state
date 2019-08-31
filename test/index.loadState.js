@@ -82,7 +82,12 @@ describe('loadState test', () => {
         // 模拟react组件
         const reactObj = {
             state: {
-                loading: null
+                loading: null,
+                data: {
+                    data1: {
+                        loading: true
+                    }
+                }
             },
             setState(fn){
                 this.state = {...this.state, ...fn.call(this, this.state)};
@@ -92,17 +97,32 @@ describe('loadState test', () => {
         await loadFnTest(reactFn, () => reactObj.state.loading);
         await loadFnTestCatch(reactFn, () => reactObj.state.loading);
         await loadFnPromiseTest(reactFn, () => reactObj.state.loading);
+
+        const reactObjFn = loadState.createRFn("data.data1.loading").bind(reactObj);
+        await loadFnTest(reactObjFn, () => reactObj.state.data.data1.loading);
+        await loadFnTestCatch(reactObjFn, () => reactObj.state.data.data1.loading);
+        await loadFnPromiseTest(reactObjFn, () => reactObj.state.data.data1.loading);
     });
 
     it("createVFn", async () => {
         // 模拟vue组件
         const vueObj = {
-            loading: true
+            loading: true,
+            data: {
+                data1: {
+                    loading: true
+                }
+            }
         };
         const vueFn = loadState.createVFn("loading").bind(vueObj);
         await loadFnTest(vueFn, () => vueObj.loading);
         await loadFnTestCatch(vueFn, () => vueObj.loading);
         await loadFnPromiseTest(vueFn, () => vueObj.loading);
+
+        const vueObjFn = loadState.createVFn("data.data1.loading").bind(vueObj);
+        await loadFnTest(vueObjFn, () => vueObj.data.data1.loading);
+        await loadFnTestCatch(vueObjFn, () => vueObj.data.data1.loading);
+        await loadFnPromiseTest(vueObjFn, () => vueObj.data.data1.loading);
     });
 });
 

@@ -54,32 +54,57 @@ const loadState = {
     /**
      * 创建react组件内部的加载状态管理方法
      * @param field state中的名字  该属性应该为数字, 如果是空或布尔类型会在计算中置为0
+     *                      允许用'.'分割属性名，表示层级 如: obj.loading 对应结构 {obj: {loading: }}
      * @return {Function}
      */
     createRFn(field){
         return this.createFn(function(change){
             // 修改组件state中指定属性
             this.setState(prevState => {
-                let loading = prevState[field];
-                loading = loadState.getNextState(loading, change);
-                let nextState = Object.assign({}, prevState);
-                nextState[field] = loading;
-                return nextState;
+                let fieldArr = field.split(".");
+                // 取到state中对应的值
+                let loading = fieldArr.reduce((obj, item) => obj[item], prevState);
+
+                let nextLoading = loadState.getNextState(loading, change);
+
+                // 最终要返回的新state对象
+                let nextState = {...prevState},
+                    tempObj = nextState;
+                fieldArr.reduce((obj, item, i) => {
+                    // 最后一层直接修改值
+                    if(fieldArr.length - 1 === i){
+                        tempObj[item] = nextLoading;
+                        return;
+                    }
+                    // 第一层之前的都copy
+                    tempObj = tempObj[item] = {...obj[item]};
+                    return obj[item];
+                }, prevState);
+
+                return nextState
             });
         });
     },
 
     /**
      * 创建vue组件内部的加载状态管理方法
-     * @param field state中的名字  该属性应该为数字, 如果是空或布尔类型会在计算中置为0
+     * @param field data中的名字  该属性值应该为数字, 如果是空或布尔类型会在计算中置为0
+     *                  允许用'.'分割属性名，表示层级 如: obj.loading 对应结构 {obj: {loading: }}
      * @return {Function}
      */
     createVFn(field){
         return this.createFn(function(change){
-            // 修改组件props中指定属性
-            let loading = this[field];
+            let fieldArr = field.split(".");
+            // 取到props中对应的值
+            let loading = fieldArr.reduce((obj, item) => obj[item], this);
             loading = loadState.getNextState(loading, change);
-            this[field] = loading;
+            // 设置值
+            fieldArr.reduce((obj, item, i) => {
+                if(fieldArr.length - 1 === i){
+                    obj[item] = loading;
+                }
+                return obj[item]
+            }, this);
         });
     }
 

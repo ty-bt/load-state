@@ -1,6 +1,6 @@
 {
   "name": "load-state",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "加载中状态管理. Loading state management.",
   "main": "lib/loadState.js",
   "repository": {
@@ -16,7 +16,8 @@
     "coveralls": "npm run cover -- --report lcovonly && cat ./coverage/lcov.info | coveralls"
   },
   "keywords": [
-    "loading"
+    "loading",
+    "promise"
   ],
   "author": "ty_bt",
   "license": "MIT",
