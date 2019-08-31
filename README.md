@@ -33,7 +33,28 @@
 ### 返回值
 返回一个加载方法
 
-示例：[![Edit wonderful-breeze-vvxnh](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/wonderful-breeze-vvxnh?fontsize=14)
+演示地址：[![Edit wonderful-breeze-vvxnh](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/wonderful-breeze-vvxnh?fontsize=14)
+
+## react hook封装示例
+hook用起来更爽
+```jsx harmony
+/**
+ * loading状态管理hook
+ * @param initValue 可空， 初始值， 可以为boolean值或int
+ * @param isNum 是否返回数字形式的加载状态， 默认为false, 返回boolean形式的状态
+ * @return {[当前loading状态值, 状态管理方法]}
+ */
+function useLoading(initValue, isNum = false) {
+  const [loading, setLoading] = useState(initValue);
+  return [
+    isNum ? loading : !!loading,
+    loadState.createFn(change => {
+      setLoading(prev => loadState.getNextState(prev, change));
+    })
+  ];
+}
+```
+演示地址：[![Edit magical-raman-tdh8w](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/magical-raman-tdh8w?fontsize=14)
 
 
 ## loadState.createVFn(field) Vue组件内使用封装
@@ -43,7 +64,7 @@
 ### 返回值
 返回一个加载方法
 
-示例：[![Edit Vue Template](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/vue-template-kdl6u?fontsize=14)
+演示地址：[![Edit Vue Template](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/vue-template-kdl6u?fontsize=14)
 
 
 ## 加载方法的使用
