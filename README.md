@@ -4,7 +4,7 @@
 [![Coverage Status](https://coveralls.io/repos/github/ty-bt/load-state/badge.svg?branch=master)](https://coveralls.io/github/ty-bt/load-state?branch=master)
 [![Build Status](https://travis-ci.org/ty-bt/load-state.svg?branch=master)](https://travis-ci.org/ty-bt/load-state)
 
-加载中状态管理. Loading state management.
+加载中状态管理, 提供React,Vue快捷调用，便捷的管理加载状态
 使用数值类型来管理加载状态，每次调用加载方法状态+1，加载方法参数中的promise执行完成或异常后状态-1
 当管理的状态值为0时为非加载状态，>0则为加载状态
 可以使用 `!!` 将其转为 boolean
@@ -34,12 +34,84 @@
 `field` state中的状态名称
 ### 返回值
 返回一个加载方法
+```jsx harmony
+import React from "react";
+import ReactDOM from "react-dom";
+import "antd/dist/antd.css";
+import { Spin, Alert, Button } from "antd";
+import loadState from "load-state";
 
+class Card extends React.Component {
+  state = { data: { loading: false } };
+
+  loading = loadState.createRFn("data.loading");
+
+  showSetTimeout = async ms => {
+    const pm = new Promise((resolve, reject) => {
+      setTimeout(() => resolve(123), ms);
+    });
+    // 可以接受到异步返回值
+    const result = await this.loading(pm);
+    console.log(result);
+
+    // 和上面代码一样 用await舒服很多
+    // this.loading(pm).then(res => {
+    //   console.log(res); // 123
+    // });
+
+    // 参数也可以是一个返回promise的方法
+    // const result = this.loading(async () => {
+    //   return await fetch("/aa/bb");
+    // });
+  };
+
+  render() {
+    return (
+      <div>
+        <Spin spinning={!!this.state.data.loading}>
+          <Alert
+            message="点击按钮进入loading状态"
+            description="可多次点击."
+            type="info"
+          />
+        </Spin>
+        <div style={{ marginTop: 16 }}>
+          Loading state: {this.state.data.loading} -{" "}
+          {(!!this.state.data.loading).toString()}
+          <Button
+            style={{ margin: 16 }}
+            type="primary"
+            onClick={() => this.showSetTimeout(1000)}
+          >
+            1000ms
+          </Button>
+          <Button type="primary" onClick={() => this.showSetTimeout(2000)}>
+            2000ms
+          </Button>
+        </div>
+      </div>
+    );
+  }
+}
+
+ReactDOM.render(<Card />, document.getElementById("container"));
+
+```
 演示地址：[![Edit wonderful-breeze-vvxnh](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/wonderful-breeze-vvxnh?fontsize=14)
 
 ## react hook封装示例
 hook用起来更爽
 ```jsx harmony
+import React, { useState } from "react";
+import ReactDOM from "react-dom";
+import "antd/dist/antd.css";
+import { Spin, Alert, Button } from "antd";
+import loadState from "load-state";
+
+/**
+ * react hook 示例
+ */
+
 /**
  * loading状态管理hook
  * @param initValue 可空， 初始值， 可以为boolean值或int
@@ -55,6 +127,47 @@ function useLoading(initValue, isNum = false) {
     })
   ];
 }
+
+function Demo() {
+  // 获取loading 状态 和 loading状态管理方法
+  const [loading, loadingFn] = useLoading(false, true);
+
+  const showSetTimeout = async ms => {
+    const pm = new Promise((resolve, reject) => {
+      setTimeout(() => resolve(123), ms);
+    });
+    // 可以接受到异步返回值
+    const result = await loadingFn(pm);
+    console.log(result);
+  };
+  return (
+    <div>
+      <Spin spinning={!!loading}>
+        <Alert
+          message="点击按钮进入loading状态"
+          description="可多次点击."
+          type="info"
+        />
+      </Spin>
+      <div style={{ marginTop: 16 }}>
+        Loading state: {loading} - {(!!loading).toString()}
+        <Button
+          style={{ margin: 16 }}
+          type="primary"
+          onClick={() => showSetTimeout(1000)}
+        >
+          1000ms
+        </Button>
+        <Button type="primary" onClick={() => showSetTimeout(2000)}>
+          2000ms
+        </Button>
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.render(<Demo />, document.getElementById("container"));
+
 ```
 演示地址：[![Edit magical-raman-tdh8w](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/magical-raman-tdh8w?fontsize=14)
 
@@ -66,6 +179,53 @@ function useLoading(initValue, isNum = false) {
 ### 返回值
 返回一个加载方法
 
+```html
+<template>
+  <div>
+    <el-alert v-loading="!!data.loading" title="点击按钮进入loading状态" type="success" description="可多次点击"></el-alert>
+    <p>{{data.loading}}-{{!!data.loading}}</p>
+    <el-button type="primary" @click="showSetTimeout(1000)">1000ms</el-button>
+    <el-button type="primary" @click="showSetTimeout(2000)">2000ms</el-button>
+  </div>
+</template>
+
+<script>
+import loadState from "load-state";
+export default {
+  data() {
+    return {
+      tableData: [],
+      data: {
+        loading: false
+      }
+    };
+  },
+  methods: {
+    loadingFn: loadState.createVFn("data.loading"),
+    showSetTimeout: async function(ms) {
+      const pm = new Promise((resolve, reject) => {
+        setTimeout(() => resolve(123), ms);
+      });
+      // 可以接受到异步返回值
+      const result = await this.loadingFn(pm);
+      console.log(result);
+
+      // 和上面代码一样 用await舒服很多
+      // this.loading(pm).then(res => {
+      //   console.log(res); // 123
+      // });
+
+      // 参数也可以是一个返回promise的方法
+      // const result = this.loading(async () => {
+      //   return await fetch("/aa/bb");
+      // });
+    }
+  }
+};
+</script>
+
+
+```
 演示地址：[![Edit Vue Template](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/vue-template-kdl6u?fontsize=14)
 
 
