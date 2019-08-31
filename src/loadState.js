@@ -20,6 +20,7 @@ const loadState = {
     /**
      * 创建一个loading方法
      * @param changeLoadFn function(change) 进入loading则change为1, 取消loading则change为-1
+     *
      * @return {Function}
      */
     createFn(changeLoadFn){
@@ -27,10 +28,16 @@ const loadState = {
          * 此方法可以接受promise对象或者一个方法, 自动设置state中指定属性(数字, 0为非加载状态, 大于0则代表是加载状态)
          * 在promise执行过程state +1
          * 在promise完成后将state -1
+         * 可以为boolean值，true loading 计数+1 , false -1（这样使用需要自己管理状态），可能会导致错误
          * @params promise Promise|Function
          * @return 返回promise或function最终返回值
          */
         return async function(promise){
+            // 如果是boolean值，则直接修改状态
+            if(is.boolean(promise)){
+                changeLoadFn.call(this, promise ? 1 : -1);
+                return;
+            }
             // 进入loading状态
             changeLoadFn.call(this, 1);
             let result;
